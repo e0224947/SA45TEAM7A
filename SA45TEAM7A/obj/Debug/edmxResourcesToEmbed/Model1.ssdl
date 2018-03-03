@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LibrarySevenAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="BkCategory">
+    <Key>
+      <PropertyRef Name="BookCategory" />
+      <PropertyRef Name="BookType" />
+    </Key>
+    <Property Name="BookCategory" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="BookType" Type="varchar" MaxLength="30" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BookInventory">
+    <Key>
+      <PropertyRef Name="ISBN" />
+    </Key>
+    <Property Name="ISBN" Type="varchar" MaxLength="13" Nullable="false" />
+    <Property Name="InventoryLibrary" Type="smallint" Nullable="false" />
+    <Property Name="InventoryLoan" Type="smallint" />
+  </EntityType>
+  <EntityType Name="books">
+    <Key>
+      <PropertyRef Name="BookID" />
+    </Key>
+    <Property Name="BookID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BookTitle" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Author" Type="varchar" MaxLength="50" />
+    <Property Name="Publisher" Type="varchar" MaxLength="50" />
+    <Property Name="BookCategory" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="BookType" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="LoanStatus" Type="bit" Nullable="false" />
+    <Property Name="ISBN" Type="varchar" MaxLength="13" Nullable="false" />
+    <Property Name="Edition" Type="varchar" MaxLength="5" />
+    <Property Name="Language" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="PublishedYear" Type="date" />
+  </EntityType>
+  <EntityType Name="BookTransaction">
+    <Key>
+      <PropertyRef Name="TransactionID" />
+    </Key>
+    <Property Name="TransactionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MemberID" Type="smallint" Nullable="false" />
+    <Property Name="DateIssue" Type="date" Nullable="false" />
+    <Property Name="OriginalDateDue" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BookTransDetail">
+    <Key>
+      <PropertyRef Name="TransactionID" />
+      <PropertyRef Name="BookID" />
+    </Key>
+    <Property Name="TransactionID" Type="int" Nullable="false" />
+    <Property Name="BookID" Type="int" Nullable="false" />
+    <Property Name="DateDue" Type="date" Nullable="false" />
+    <Property Name="DateReturn" Type="date" />
+    <Property Name="RentalStatus" Type="bit" Nullable="false" />
+    <Property Name="Remarks" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="EmployeeID" />
+    </Key>
+    <Property Name="EmployeeID" Type="smallint" Nullable="false" />
+    <Property Name="EmployeeName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="TitleOfCourtesy" Type="varchar" MaxLength="5" />
+    <Property Name="EmployeePassword" Type="nvarchar" MaxLength="30" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FineTrans">
+    <Key>
+      <PropertyRef Name="MemberID" />
+    </Key>
+    <Property Name="MemberID" Type="smallint" Nullable="false" />
+    <Property Name="TransactionID" Type="int" Nullable="false" />
+    <Property Name="FineAmount" Type="decimal" Precision="4" Scale="2" Nullable="false" />
+    <Property Name="FineStatus" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Member">
+    <Key>
+      <PropertyRef Name="MemberID" />
+    </Key>
+    <Property Name="MemberID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MemberName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="MemberType" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="Gender" Type="nvarchar" MaxLength="1" Nullable="false" />
+    <Property Name="Age" Type="smallint" Nullable="false" />
+    <Property Name="Address" Type="varchar" MaxLength="255" />
+    <Property Name="Country" Type="varchar" MaxLength="40" Nullable="false" />
+    <Property Name="PostalCode" Type="varchar" MaxLength="10" />
+    <Property Name="ContactNumber" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="ContactTitle" Type="varchar" MaxLength="5" />
+    <Property Name="EmailAddress" Type="varchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="255" />
+    <Property Name="Password" Type="varchar" MaxLength="30" />
+  </EntityType>
+  <Association Name="FK__books__25869641">
+    <End Role="BkCategory" Type="Self.BkCategory" Multiplicity="1" />
+    <End Role="books" Type="Self.books" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BkCategory">
+        <PropertyRef Name="BookCategory" />
+        <PropertyRef Name="BookType" />
+      </Principal>
+      <Dependent Role="books">
+        <PropertyRef Name="BookCategory" />
+        <PropertyRef Name="BookType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__books__ISBN__3D5E1FD2">
+    <End Role="BookInventory" Type="Self.BookInventory" Multiplicity="1" />
+    <End Role="books" Type="Self.books" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BookInventory">
+        <PropertyRef Name="ISBN" />
+      </Principal>
+      <Dependent Role="books">
+        <PropertyRef Name="ISBN" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BookTrans__BookI__7B5B524B">
+    <End Role="books" Type="Self.books" Multiplicity="1" />
+    <End Role="BookTransDetail" Type="Self.BookTransDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="books">
+        <PropertyRef Name="BookID" />
+      </Principal>
+      <Dependent Role="BookTransDetail">
+        <PropertyRef Name="BookID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BookTrans__Membe__7C4F7684">
+    <End Role="Member" Type="Self.Member" Multiplicity="1" />
+    <End Role="BookTransaction" Type="Self.BookTransaction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Member">
+        <PropertyRef Name="MemberID" />
+      </Principal>
+      <Dependent Role="BookTransaction">
+        <PropertyRef Name="MemberID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BookTrans__Trans__7A672E12">
+    <End Role="BookTransaction" Type="Self.BookTransaction" Multiplicity="1" />
+    <End Role="BookTransDetail" Type="Self.BookTransDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BookTransaction">
+        <PropertyRef Name="TransactionID" />
+      </Principal>
+      <Dependent Role="BookTransDetail">
+        <PropertyRef Name="TransactionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__FineTrans__Membe__395884C4">
+    <End Role="Member" Type="Self.Member" Multiplicity="1" />
+    <End Role="FineTrans" Type="Self.FineTrans" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Member">
+        <PropertyRef Name="MemberID" />
+      </Principal>
+      <Dependent Role="FineTrans">
+        <PropertyRef Name="MemberID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__FineTrans__Trans__37703C52">
+    <End Role="BookTransaction" Type="Self.BookTransaction" Multiplicity="1" />
+    <End Role="FineTrans" Type="Self.FineTrans" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BookTransaction">
+        <PropertyRef Name="TransactionID" />
+      </Principal>
+      <Dependent Role="FineTrans">
+        <PropertyRef Name="TransactionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__FineTrans__Trans__3864608B">
+    <End Role="BookTransaction" Type="Self.BookTransaction" Multiplicity="1" />
+    <End Role="FineTrans" Type="Self.FineTrans" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BookTransaction">
+        <PropertyRef Name="TransactionID" />
+      </Principal>
+      <Dependent Role="FineTrans">
+        <PropertyRef Name="TransactionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="LibrarySevenAModelStoreContainer">
+    <EntitySet Name="BkCategory" EntityType="Self.BkCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BookInventory" EntityType="Self.BookInventory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="books" EntityType="Self.books" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BookTransaction" EntityType="Self.BookTransaction" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BookTransDetail" EntityType="Self.BookTransDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FineTrans" EntityType="Self.FineTrans" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__books__25869641" Association="Self.FK__books__25869641">
+      <End Role="BkCategory" EntitySet="BkCategory" />
+      <End Role="books" EntitySet="books" />
+    </AssociationSet>
+    <AssociationSet Name="FK__books__ISBN__3D5E1FD2" Association="Self.FK__books__ISBN__3D5E1FD2">
+      <End Role="BookInventory" EntitySet="BookInventory" />
+      <End Role="books" EntitySet="books" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BookTrans__BookI__7B5B524B" Association="Self.FK__BookTrans__BookI__7B5B524B">
+      <End Role="books" EntitySet="books" />
+      <End Role="BookTransDetail" EntitySet="BookTransDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BookTrans__Membe__7C4F7684" Association="Self.FK__BookTrans__Membe__7C4F7684">
+      <End Role="Member" EntitySet="Member" />
+      <End Role="BookTransaction" EntitySet="BookTransaction" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BookTrans__Trans__7A672E12" Association="Self.FK__BookTrans__Trans__7A672E12">
+      <End Role="BookTransaction" EntitySet="BookTransaction" />
+      <End Role="BookTransDetail" EntitySet="BookTransDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__FineTrans__Membe__395884C4" Association="Self.FK__FineTrans__Membe__395884C4">
+      <End Role="Member" EntitySet="Member" />
+      <End Role="FineTrans" EntitySet="FineTrans" />
+    </AssociationSet>
+    <AssociationSet Name="FK__FineTrans__Trans__37703C52" Association="Self.FK__FineTrans__Trans__37703C52">
+      <End Role="BookTransaction" EntitySet="BookTransaction" />
+      <End Role="FineTrans" EntitySet="FineTrans" />
+    </AssociationSet>
+    <AssociationSet Name="FK__FineTrans__Trans__3864608B" Association="Self.FK__FineTrans__Trans__3864608B">
+      <End Role="BookTransaction" EntitySet="BookTransaction" />
+      <End Role="FineTrans" EntitySet="FineTrans" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
